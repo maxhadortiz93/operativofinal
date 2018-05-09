@@ -12,7 +12,6 @@ class Ruta extends Model
 
     	  'id',
         'distancia',
-        'sigla',
         'duracion',
         'tarifa_vuelo',
         'origen_id',
@@ -24,12 +23,12 @@ class Ruta extends Model
 
     public function segmentos()
     {
-    	return $this->belongsTo('App\Segmento');
+    	return $this->belongsTo('App\Models\Operativo\Segmento');
     }
 
     public function sucursal()
     {
-    	return $this->belongsTo('App\Sucursal');
+    	return $this->belongsTo('App\Models\Operativo\Sucursal');
     }
 
     public function origen()
@@ -85,7 +84,7 @@ class Ruta extends Model
     public function scopeBuscador($query, $origen,$destino){
       return $query->where('destino_id',$destino)
                   ->where('origen_id',$origen)
-                  ->where('estado',"activa");
+                  ->where('estado',"activo");
   }
   public function scopeRutaInactiva($query, $origen,$destino){
       return $query->where('destino_id',$destino)

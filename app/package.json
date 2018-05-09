@@ -22,6 +22,7 @@
     "dependencies": {
         "bootstrap-vue": "^2.0.0-rc.9",
         "toastr": "^2.1.4",
+        "vue-multiselect": "^2.1.0",
         "vue-notifications": "^0.9.0",
         "vue-time-picker": "^0.2.6",
         "vue-toasted": "^1.1.24",

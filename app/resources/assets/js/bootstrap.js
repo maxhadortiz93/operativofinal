@@ -43,8 +43,10 @@ import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.js';
 import VueTimepicker from 'vue2-timepicker/dist/vue2-timepicker.js';
 import Toasted from 'vue-toasted';
 
+
 Vue.use(Toasted)
 Vue.use(BootstrapVue);
+
 
 
 /**

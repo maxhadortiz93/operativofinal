@@ -63,6 +63,45 @@ class PlanificarRutaController extends Controller
     $ruta->save();
     return "La Ruta ha sido habilitada";
   }
+
+  public function obtenerruta(){
+    return Sucursal::orderBy('nombre','ASC')->get();        
+  }
+
+  public function crearuta(Request $datos){
+    //  return $datos;
+    $ruta = new Ruta();
+    //return count($ruta->Buscador($datos->origen['id'],$datos->destino['id'])->get());
+    if(count($ruta->Buscador($datos->origen['id'],$datos->destino['id'])->get())){
+      return 'La Ruta '.$datos->origen['nombre']." ---> ".$datos->destino['nombre']." Ya Existe";
+    }
+    else{
+      $ruta->origen_id=$datos->origen['id'];
+      $ruta->destino_id=$datos->destino['id'];
+      $ruta->distancia=$datos->distancia;
+      $ruta->duracion=$datos->duracion['HH'].":".$datos->duracion['mm'].":".$datos->duracion['ss'];
+      $ruta->tarifa_vuelo=$datos->tarifa;    
+      $ruta->estado="activo";
+     
+      $ruta->save();
+      return 'La Ruta '.$datos->origen['nombre']." ---> ".$datos->destino['nombre']." Se ha Generado Exitosamente";
+    }
+    return "ok2";
+   
+  }
+
+  public function prueba(){
+    $ruta = new Ruta();
+    
+    $ruta->origen_id=1;
+    $ruta->destino_id=2;
+    $ruta->distancia=500;
+    $ruta->duracion="00:00:00";
+    $ruta->tarifa_vuelo=7000;    
+    $ruta->estado="activo";
+  
+    $ruta->save();
+  }
     /*
     //POST - CREAR UNA RUTA
     public function CreateRuta(Request $datos){

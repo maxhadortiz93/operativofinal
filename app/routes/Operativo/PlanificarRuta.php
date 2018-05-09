@@ -10,4 +10,14 @@
         
     });
 
+    Route::group(['prefix'=>'sucursales'], function(){
+
+        Route::get('/all','Operativo\PlanificarRutaController@obtenerruta');
+        Route::post('/','Operativo\PlanificarRutaController@crearuta');
+        Route::get('/','Operativo\PlanificarRutaController@prueba');
+      
+    
+        
+    });
+
 ?>

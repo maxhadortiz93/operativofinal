@@ -3,11 +3,11 @@
     <!-- User Interface controls -->
     <b-row>
       <b-col md="6" class="my-1">
-        <b-form-group horizontal label="Filter" class="mb-0">
+        <b-form-group horizontal label="Filtro" class="mb-0">
           <b-input-group>
-            <b-form-input v-model="filter" placeholder="Type to Search" />
+            <b-form-input v-model="filter" placeholder="Escriba para buscar" />
             <b-input-group-append>
-              <b-btn :disabled="!filter" @click="filter = ''">Clear</b-btn>
+              <b-btn :disabled="!filter" @click="filter = ''">Limpiar</b-btn>
             </b-input-group-append>
           </b-input-group>
         </b-form-group>
@@ -16,7 +16,7 @@
         <b-form-group horizontal label="Sort" class="mb-0">
           <b-input-group>
             <b-form-select v-model="sortBy" :options="sortOptions">
-              <option slot="first" :value="null">-- none --</option>
+              <option slot="first" :value="null">-- ninguno --</option>
             </b-form-select>
             <b-form-select :disabled="!sortBy" v-model="sortDesc" slot="append">
               <option :value="false">Asc</option>
@@ -26,7 +26,7 @@
         </b-form-group>
       </b-col>
       <b-col md="6" class="my-1">
-        <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" class="my-0" />
+         <b-btn v-b-modal.agregar variant="primary">Agregar Nueva Ruta</b-btn>
       </b-col>
       <b-col md="6" class="my-1">
         <b-form-group horizontal label="Per page" class="mb-0">
@@ -79,9 +79,14 @@
         </b-card>
       </template>
     </b-table>
+    <b-col class="col-md-12 ">
+      <b-pagination  align="center" :total-rows="totalRows" :per-page="perPage" v-model="currentPage" class="my-0" />
+    </b-col>
 
+    
     <!-- Modal Actualizar -->
     <b-modal ref="myModalRef" id="modalInfo" @hide="resetModal" :title="modalInfo.title"  hide-footer>
+    <div v-if="modalInfo.content != ''">
     <b-form @submit.prevent="actualizar()">
        <!--    <pre>{{modalInfo.content}}</pre>-->
        <div class="row">
@@ -108,7 +113,7 @@
            <div class="form-group col-sm-1 "></div>
         </div>
       <div class="row"><p></p></div>
-      <div class="row text-center"><div class="col-sm-12 " ><label for="duracion" class="text-center"> <b> Duracion: </b> </label></div></div>   
+      <div class="row text-center"><div class="col-sm-12 " ><label for="duracion" class="text-center"> <b> Tiempo de Vuelo: </b> </label></div></div>   
       <div class="row col-sm-12 " id="duracion">
       <div class="form-group col-sm-2 "></div>
       <div class="col-sm-3 ">
@@ -133,8 +138,12 @@
       </div>
       
     </b-form>
+    </div>
      
     </b-modal>
+
+    <!-- AGREGAR -->
+     <RegistrarRutas> </RegistrarRutas>
 
   </b-container>
 </template>
@@ -142,11 +151,21 @@
 <script>
 
 import axios  from 'axios';
+import RegistrarRutas from './ModalRegistrar';
+import {EventBus} from './event-bus.js'
 
 
 export default {
+  components: {
+    RegistrarRutas
+  },
   created: function(){
+    EventBus.$on('actualizartabla',(event) =>{
+      alert("prueba pipe");
+      this.Cargadatos(this);
+    });
     this.Cargadatos(this)
+
   },
   data () {
     return {
@@ -198,6 +217,7 @@ export default {
       
       this.$root.$emit('bv::show::modal', 'modalInfo', button)
     },
+   
     resetModal () {
       this.modalInfo.title = ''
       this.modalInfo.content = ''
@@ -252,13 +272,14 @@ export default {
           Estado: this.modalInfo.content.Estado,
           Duracion:  this.modalInfo.content.Duracion      
         }
-      }).then(function(response){
+      }).then((response) =>{
        Vue.toasted.show('Se ha guardado existosamente la informacion', {
            theme: "primary", 
 	       position: "bottom-right",
 	        duration : 2000
        });
        //this.$refs.myModalRef.hide();
+       this.$root.$emit('bv::hide::modal', 'modalInfo', '#app');
 
       }).catch((err)=>{
          Vue.toasted.show('Ha ocurrido un error', {
